@@ -38,7 +38,12 @@ class EarthquakeTableViewController: UITableViewController
                 let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: container.viewContext, sectionNameKeyPath: nil, cacheName: nil)
                 self.fetchResultsController = controller
                 self.updateUI()
-                self.getEarthquakes(false)
+                
+                // This delay seems dirty but not sure why we crash on initial lanch without it
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2)
+                {
+                    self.getEarthquakes(false)
+                }
             }
         }
         operationQueue.addOperation(operation)
