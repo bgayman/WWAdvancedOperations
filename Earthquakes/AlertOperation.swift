@@ -47,7 +47,7 @@ class AlertOperation: BaseOperation
         add(MutuallyExclusive<UIViewController>())
     }
     
-    func addAction(_ title: String, style: UIAlertActionStyle = .default, handler: ((AlertOperation) -> ())? = nil)
+    func addAction(_ title: String, style: UIAlertAction.Style = .default, handler: ((AlertOperation) -> ())? = nil)
     {
         let action = UIAlertAction(title: title, style: style)
         { [weak self] (_) in

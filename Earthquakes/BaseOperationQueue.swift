@@ -35,7 +35,7 @@ class BaseOperationQueue: OperationQueue
             
             op.add(delegate)
             
-            let dependencies = op.conditions.flatMap  { $0.dependency(for: op) }
+            let dependencies = op.conditions.compactMap  { $0.dependency(for: op) }
             
             for dependency in dependencies
             {
@@ -43,7 +43,7 @@ class BaseOperationQueue: OperationQueue
                 self.addOperation(dependency)
             }
             
-            let concurrencyCategories: [String] = op.conditions.flatMap
+            let concurrencyCategories: [String] = op.conditions.compactMap
             { condition in
                 guard type(of: condition).isMutuallyExclusive else { return nil }
                 return "\(type(of: condition))"

@@ -23,7 +23,7 @@ class EarthquakeTableViewController: UITableViewController
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(self.startRefreshing(_:)), for: .valueChanged)
         tableView.estimatedRowHeight = 68
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         
         
         let operation = LoadModelOperation

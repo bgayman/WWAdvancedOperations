@@ -112,7 +112,7 @@ class ParseEarthquakesOperation: BaseOperation
     
     fileprivate func parse(_ features: [[String: Any]])
     {
-        let parsedEarthquakes = features.flatMap(ParsedEarthquake.init)
+        let parsedEarthquakes = features.compactMap(ParsedEarthquake.init)
         let storedEarthquakes = (try? context.fetch(Earthquake.fetchRequest())) ?? []
         let earthquakeNameSet = Set(storedEarthquakes.map { ($0 as AnyObject).name ?? "" })
         context.perform
@@ -133,7 +133,7 @@ class ParseEarthquakesOperation: BaseOperation
     {
         let earthquake = Earthquake(context: context)
         earthquake.identifier = parsed.identifier
-        earthquake.timestamp = parsed.date as NSDate
+        earthquake.timestamp = parsed.date
         earthquake.latitude = parsed.latitude
         earthquake.longitude = parsed.longitude
         earthquake.depth = parsed.depth

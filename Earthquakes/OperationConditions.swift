@@ -45,7 +45,7 @@ struct OperationConditionEvaluator
         
         conditionGroup.notify(queue: DispatchQueue.global())
         {
-            var failures = results.flatMap { $0?.error }
+            var failures = results.compactMap { $0?.error }
             
             if operation.isCancelled
             {
@@ -275,9 +275,9 @@ struct CloudContainerCondition: OperationCondition
     static let isMutuallyExclusive = false
     
     let container: CKContainer
-    let permission: CKApplicationPermissions
+    let permission: CKContainer.Application.Permissions
     
-    init(container: CKContainer, permission: CKApplicationPermissions = [])
+    init(container: CKContainer, permission: CKContainer.Application.Permissions = [])
     {
         self.container = container
         self.permission = permission
@@ -309,9 +309,9 @@ struct CloudContainerCondition: OperationCondition
 fileprivate class CloudKitPermissionOperation: BaseOperation
 {
     let container: CKContainer
-    let permission: CKApplicationPermissions
+    let permission: CKContainer.Application.Permissions
     
-    init(container: CKContainer, permission: CKApplicationPermissions)
+    init(container: CKContainer, permission: CKContainer.Application.Permissions)
     {
         self.container = container
         self.permission = permission
@@ -875,19 +875,19 @@ extension NSError
 {
     convenience init(code: OperationErrorCode, userInfo: [AnyHashable: Any]? = nil)
     {
-        self.init(domain: OperationErrorDomain, code: code.rawValue, userInfo: userInfo as! [String : Any])
+        self.init(domain: OperationErrorDomain, code: code.rawValue, userInfo: userInfo as? [String : Any])
     }
 }
 
 extension CKContainer
 {
-    func verify(_ permission: CKApplicationPermissions, request shouldRequest: Bool, completion: @escaping (NSError?) ->())
+    func verify(_ permission: CKContainer.Application.Permissions, request shouldRequest: Bool, completion: @escaping (NSError?) ->())
     {
         verifyAccountStatus(self, permission: permission, shouldRequest: shouldRequest, completion: completion)
     }
 }
 
-fileprivate func verifyAccountStatus(_ container: CKContainer, permission: CKApplicationPermissions, shouldRequest: Bool, completion: @escaping (NSError?) -> ())
+fileprivate func verifyAccountStatus(_ container: CKContainer, permission: CKContainer.Application.Permissions, shouldRequest: Bool, completion: @escaping (NSError?) -> ())
 {
     container.accountStatus
         { (accountStatus, error) in
@@ -911,7 +911,7 @@ fileprivate func verifyAccountStatus(_ container: CKContainer, permission: CKApp
     }
 }
 
-fileprivate func verifyPermission(_ container: CKContainer, permission: CKApplicationPermissions, shouldRequest: Bool, completion: @escaping (NSError?) -> Void)
+fileprivate func verifyPermission(_ container: CKContainer, permission: CKContainer.Application.Permissions, shouldRequest: Bool, completion: @escaping (NSError?) -> Void)
 {
     container.status(forApplicationPermission: permission)
     { permissionStatus, permissionError in
@@ -931,7 +931,7 @@ fileprivate func verifyPermission(_ container: CKContainer, permission: CKApplic
     }
 }
 
-fileprivate func requestPermission(_ container: CKContainer, permission: CKApplicationPermissions, completion: @escaping (NSError?) -> Void)
+fileprivate func requestPermission(_ container: CKContainer, permission: CKContainer.Application.Permissions, completion: @escaping (NSError?) -> Void)
 {
     DispatchQueue.main.async
         {
@@ -991,7 +991,7 @@ extension UIUserNotificationSettings
         }
         
         let newCategories = settings.categories ?? []
-        var newCategoriesByIdentifier: [String: UIUserNotificationCategory] = newCategories.reduce([:])
+        let newCategoriesByIdentifier: [String: UIUserNotificationCategory] = newCategories.reduce([:])
         { (result, category) in
             var result = result
             result[category.identifier ?? ""] = category
