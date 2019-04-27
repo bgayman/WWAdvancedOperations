@@ -875,7 +875,7 @@ extension NSError
 {
     convenience init(code: OperationErrorCode, userInfo: [AnyHashable: Any]? = nil)
     {
-        self.init(domain: OperationErrorDomain, code: code.rawValue, userInfo: userInfo)
+        self.init(domain: OperationErrorDomain, code: code.rawValue, userInfo: userInfo as! [String : Any])
     }
 }
 

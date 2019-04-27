@@ -8,7 +8,7 @@
 
 import Foundation
 
-typealias OperationBlock = ( @escaping (Void) -> Void) -> Void
+typealias OperationBlock = ( @escaping () -> Void) -> Void
 
 class BaseBlockOperation: BaseOperation
 {

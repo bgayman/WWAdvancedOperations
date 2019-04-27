@@ -99,8 +99,8 @@ final class EarthquakeDetailTableViewController: UITableViewController
                 shareSheet.popoverPresentationController?.barButtonItem = sender
                 
                 shareSheet.completionWithItemsHandler =
-                { _ in
-                    continuation
+                { (_, _, _, _) in
+                    continuation()
                 }
                 
                 self.present(shareSheet, animated: true)

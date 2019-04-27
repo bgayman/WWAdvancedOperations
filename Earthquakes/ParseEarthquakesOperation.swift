@@ -114,7 +114,7 @@ class ParseEarthquakesOperation: BaseOperation
     {
         let parsedEarthquakes = features.flatMap(ParsedEarthquake.init)
         let storedEarthquakes = (try? context.fetch(Earthquake.fetchRequest())) ?? []
-        let earthquakeNameSet = Set(storedEarthquakes.map { $0.name ?? "" })
+        let earthquakeNameSet = Set(storedEarthquakes.map { ($0 as AnyObject).name ?? "" })
         context.perform
         {
             for newEarthquake in parsedEarthquakes
